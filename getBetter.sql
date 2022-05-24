@@ -73,3 +73,55 @@ insert into Share (UserID, VideoID, Email, ShareDate) values
 (N'VanNTT', N'Hi9eQnS7snc', N'maint@gmail.com', getdate()),
 (N'MaiNT', N'IryGw25Kgi0', N'teonv@gmail.com', getdate())
 go
+
+-- procedure
+create proc sp_TopViewNotInHistory(@size int, @userId VARCHAR(20))
+as
+begin
+	select top (@size) * from Video v
+	where v.Id not in (
+		select h.VideoId from History h
+		where h.UserId = @userId
+	)
+	order by [Views] desc
+end
+go
+
+create proc sp_TopViewNotInVideoId(@size int, @videoId VARCHAR(20))
+as
+begin
+	select top (@size) * from Video v
+	where v.Id not in (@videoId)
+	order by [Views] desc
+end
+go
+
+create proc sp_TopRandomNotInHistory(@size int, @userId VARCHAR(20))
+as
+begin
+	select top (@size) * from Video v
+	where v.Id not in (
+		select h.VideoId from History h
+		where h.UserId = @userId
+	)
+	order by newid()
+end
+go
+
+create proc sp_TopRandomNotInVideoId(@size int, @videoId VARCHAR(20))
+as
+begin
+	select top (@size) * from Video v
+	where v.Id not in (@videoId)
+	order by newid()
+end
+go
+
+create proc sp_selectUsersLikedVideoByVideoId(@videoId varchar(20))
+as 
+begin
+	select u.Id, u.Fullname, u.Email, h.LikeDate
+	from [User] u inner join History h on u.Id = h.UserId
+		inner join Video v on h.VideoId = v.Id
+	where v.Id = @videoId AND u.Active = 1 and v.Active = 1 and h.IsLiked = 1
+end
