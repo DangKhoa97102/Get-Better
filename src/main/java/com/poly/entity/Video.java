@@ -3,8 +3,19 @@ package com.poly.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-import javax.persistence.*;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
+
+import com.poly.constant.NamedStored;
+import com.poly.constant.NamedStoredParam;
 
 @Entity
 @NamedQuery(name="Video.findAll", query="SELECT v FROM Video v")
